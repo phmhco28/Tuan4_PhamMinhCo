@@ -1,0 +1,79 @@
+﻿@model Tuan4_PhamMinhCo.Models.Sach
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+            $(document).ready(function ()
+{
+                if ('@TempData["value"]' != "" || '@TempData["value"]' != null)
+                {
+                    if ("@TempData["value"]" == "test")
+                    {
+                        $("#myModal").modal('show');
+                    }
+                    else {
+                        $("#myModal").modal('hide');
+                    }
+                }
+            });
+    </script>
+}
+
+@*<h2>Detail</h2>
+    <div id="container">
+        <div id="book-img">
+            <img src="@Model.hinh" />
+        </div>
+        <div id="book-info">
+            <div class="content">
+                <h2>Mã loại: </h2>
+                <h3>@Html.DisplayFor(model => model.maloai)</h3>
+            </div>
+            <div class="content">
+                <h2>Tên sách: </h2>
+                <h3>@Html.DisplayFor(model => model.tensach)</h3>
+            </div>
+            <div class="content">
+                <h2>Giá bán: </h2>
+                <h3>@Html.DisplayFor(model => model.giaban) VNĐ</h3>
+            </div>
+            <div class="content">
+                <h2>Ngày cập nhật: </h2>
+                <h3>@Html.DisplayFor(model => model.ngaycapnhat)</h3>
+            </div>
+            <div class="content">
+                <h2>Số lượng tồn: </h2>
+                <h3>@Html.DisplayFor(model => model.soluongton)</h3>
+            </div>
+        </div>
+    </div>
+
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.masach }) |
+        @Html.ActionLink("Back to List", "ListSach")
+    </p>*@

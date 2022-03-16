@@ -1,0 +1,79 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.contentList {
+    font-weight: bold;
+    background-color: azure;
+    padding-top:200px;
+}
+
+/*Set for Detail Page*/
+#container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    height: 500px;
+    width: 700px;
+    margin-bottom: 40px;
+    font-size: 10px;
+}
+
+#book-img {
+    margin: 40px;
+    width: 40%;
+    height: 100%;
+}
+
+#book-img img {
+    width: 100%;
+    height: 80%;
+}
+
+
+#book-info {
+    width: 60%;
+    height: 100%;
+    color: #3677e0;
+}
+
+.content {
+    width: 100%;
+    display:flex;
+    flex-direction: row;
+    padding-top: 28px;
+}
+
+#book-info h2 {
+    font-size: 21px;
+    width: 50%;
+}
+
+#book-info h3 {
+    width: 50%;
+    font-size: 21px;
+    margin-left: 12px;
+}

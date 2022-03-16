@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Tuan4_PhamMinhCo.Models.GioHang>
+
+@{
+    ViewBag.Title = "GioHang";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>GioHang</h2>
+
+<div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:salmon">                    
+                    <h4 class="modal-title">Thông Báo</h4>
+                </div>
+                <div class="modal-body" style="font-weight:bold">
+                    <p>Không đủ số lượng !!!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+            $(document).ready(function ()
+{
+                if ('@TempData["value"]' != "" || '@TempData["value"]' != null)
+                {
+                    if ("@TempData["value"]" == "NotEnough")
+                    {
+                        $("#myModal").modal('show');
+                    }
+                    else {
+                        $("#myModal").modal('hide');
+                    }
+                }
+            });
+    </script>
+}
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.tensach)</th>
+        <th>@Html.DisplayNameFor(model => model.hinh)</th>
+        <th>@Html.DisplayNameFor(model => model.giaban)</th>
+        <th>@Html.DisplayNameFor(model => model.iSoluong)</th>
+        <th>@Html.DisplayNameFor(model => model.dthanhtien)</th>
+        <th></th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.tensach)</td>
+            <td><img src="@item.hinh" width="180" /></td>
+            @using (Html.BeginForm("CapnhatGioHang", "GioHang", new { @id = item.masach }))
+            {
+                <td>@string.Format("{0:0,0}", item.giaban) VNĐ</td>
+                <td><input type="number" min="1" name="txtSoLuong" value="@item.iSoluong" /></td>
+                <td>
+                    <a href="@Url.Action("Detail", "Sach", new { @id = item.masach})">Chi tiết</a> |
+                    <a href="@Url.Action("Xoagiohang", "Giohang", new { @id = item.masach})">Xóa</a>
+                </td>
+                <td><input type="submit" value="cập nhật" class="btn btn-success" /></td>
+
+            }
+        </tr>
+    }
+    <tr style="font-weight: bold; text-align: left; color: red">
+        <td colspan="2">Số loại sách: @ViewBag.Tongsoluongsanpham</td>
+        <td colspan="2">Số lượng sách: @ViewBag.Tongsoluong</td>
+        <td colspan="4">Tổng tiền: @String.Format("{0:0,0}", ViewBag.Tongtien) VNĐ</td>
+    </tr>
+    <tr style="font-weight: bold; text-align: right; color: blue">
+        <td colspan="5">
+            @Html.ActionLink("Xóa giỏ hàng", "Xoatatcagiohang")
+        </td>
+    </tr>
+    <tr style="font-weight: bold; text-align: right; color: yellow">
+        <td colspan="5">
+            @Html.ActionLink("Đặt hàng", "Dathang", "Giohang")
+        </td>
+    </tr>
+</table>
+
