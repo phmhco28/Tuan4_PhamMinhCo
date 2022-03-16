@@ -7,23 +7,18 @@
 
 <h2>GioHang</h2>
 
-<div>
-    <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header" style="background-color:salmon">                    
-                    <h4 class="modal-title">Thông Báo</h4>
-                </div>
-                <div class="modal-body" style="font-weight:bold">
-                    <p>Không đủ số lượng !!!</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+<div id="myPopup" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:salmon">
+                <h4 class="modal-title">Thông Báo</h4>
             </div>
-
+            <div class="modal-body" style="font-weight:bold">
+                <p>Không đủ số lượng !!!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
@@ -32,14 +27,14 @@
     <script>
             $(document).ready(function ()
 {
-                if ('@TempData["value"]' != "" || '@TempData["value"]' != null)
+                if ("@TempData["value"]" != "" || "@TempData["value"]" != null)
                 {
                     if ("@TempData["value"]" == "NotEnough")
                     {
-                        $("#myModal").modal('show');
+                        $("#myPopup").modal('show');
                     }
                     else {
-                        $("#myModal").modal('hide');
+                        $("#myPopup").modal('hide');
                     }
                 }
             });
