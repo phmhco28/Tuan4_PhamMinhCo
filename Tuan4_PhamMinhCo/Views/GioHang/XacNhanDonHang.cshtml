@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "XacNhanDonHang";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Tuan4_PhamMinhCo.Models;
+@{
+    KhachHang kh = (KhachHang)Session["taiKhoan"];
+}
+<h2>Đơn hàng đã được xác nhận</h2>
+<h3>Chúng tôi đã gửi xác nhận đến Gmail của bạn, Vui lòng truy cập <a href="https://mail.google.com/mail/u/0/#inbox">Mail</a>kiểm tra</h3>
+<h4>Chúng tôi sẽ giao hàng cho bạn sớm nhất có thể</h4>
+<p>
+    @Html.ActionLink("Về trang chủ", "Index", "Home")
+</p>
+

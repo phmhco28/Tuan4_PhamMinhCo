@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using Tuan4_PhamMinhCo.Models;
@@ -144,16 +146,98 @@ namespace Tuan4_PhamMinhCo.Controllers
         }
 
         public ActionResult Dathang()
-        {            
-            List<GioHang> listGioHang = Laygiohang();
-            foreach (var item in listGioHang)
+        {           
+            if (Session["TaiKhoan"] == null || Session["TaiKhoan"].ToString() == "")
             {
-                var sanpham = data.Saches.FirstOrDefault(p => p.masach == item.masach);
-                sanpham.soluongton -= item.iSoluong;
-                UpdateModel(sanpham);
-                data.SubmitChanges();
+                return RedirectToAction("DangNhap", "NguoiDung");
             }
-            return RedirectToAction("Giohang");
+            if (Session["GioHang"] == null)
+            {
+                return RedirectToAction("Index", "Sach");
+            }
+            List<GioHang> listGioHang = Laygiohang();
+            ViewBag.Tongsoluong = Tongsoluong();
+            ViewBag.Tongtien = Tongtien();
+            ViewBag.Tongsoluongsanpham = Tongsoluongsanpham();
+            return View(listGioHang);
+        }
+
+        [HttpPost]
+        public ActionResult Dathang(FormCollection collection)
+        {
+            DonHang dh = new DonHang();
+            KhachHang kh = (KhachHang)Session["TaiKhoan"];
+            Sach s = new Sach();
+
+            List<GioHang> gh = Laygiohang();
+            var ngaygiao = String.Format("{0:MM/dd/yyyy}", collection["ngaygiao"]);
+            if (DateTime.Parse(ngaygiao) <= DateTime.Now)
+            {
+                ViewData["Error_Deliverdate"] = "Ngày giao hàng phải lớn hơn ngày đặt hàng !!!";
+            }
+            else
+            {
+                dh.makh = kh.makh;
+                dh.ngaydat = DateTime.Now;
+                dh.ngaygiao = DateTime.Parse(ngaygiao);
+                dh.giaohang = false;
+                dh.thanhtoan = false;
+                data.DonHangs.InsertOnSubmit(dh);
+                data.SubmitChanges();
+
+                foreach (var item in gh)
+                {
+                    ChiTietDonHang ctdh = new ChiTietDonHang();
+                    ctdh.madon = dh.madon;
+                    ctdh.masach = item.masach;
+                    ctdh.soluong = item.iSoluong;
+                    ctdh.gia = (decimal)item.giaban;
+                    s = data.Saches.SingleOrDefault(p => p.masach == item.masach);
+                    s.soluongton -= ctdh.soluong;
+                    data.SubmitChanges();
+                    data.ChiTietDonHangs.InsertOnSubmit(ctdh);
+                }
+                data.SubmitChanges();
+                Session["Giohang"] = null;
+                //Send Email to Customer
+                if (ModelState.IsValid)
+                {
+                    var senderEmail = new MailAddress("store.confirmmail@gmail.com", "BookStore");
+                    var receiverEmail = new MailAddress(kh.email, "Receiver");
+                    var password = "password"; //lahcbhn
+                    var sub = "XAC_NHAN_DON_HANG";
+                    var body = "Tên khách hàng: " + kh.hoten + "\n" +
+                                "Địa chỉ: " + kh.diachi + "\n" +
+                                "Số điện thoại: " + kh.dienthoai + "\n" +
+                                "Ngày đặt hàng: " + DateTime.Now.ToShortDateString() + "\n" +
+                                "Ngày giao hàng: " + ngaygiao + "\n";
+                    var smtp = new SmtpClient
+                    {
+                        Host = "smtp.gmail.com",
+                        Port = 587,
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false,
+                        Credentials = new NetworkCredential(senderEmail.Address, password)
+                    };
+                    using (var mess = new MailMessage(senderEmail, receiverEmail)
+                    {
+                        Subject = sub,
+                        Body = body
+                    })
+                    {
+                        smtp.Send(mess);
+                    }
+                }
+                ViewBag.Error = "Some Error";
+                return RedirectToAction("XacNhanDonHang", "GioHang");
+            }
+            return this.Dathang();            
+        }
+
+        public ActionResult XacNhanDonHang()
+        {
+            return View();
         }
     }
 }
